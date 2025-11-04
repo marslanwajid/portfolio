@@ -128,8 +128,8 @@ const ServicesSection = () => {
         }}
       >
         {/* Header */}
-        <div className="mb-16">
-          <div className="text-gray-500 text-xs tracking-wider mb-8">• My Services</div>
+        <div className="mb-8 sm:mb-12 lg:mb-16">
+          <div className="text-gray-500 text-xs tracking-wider mb-4 sm:mb-6 lg:mb-8">• My Services</div>
         </div>
 
         {/* Services Accordion */}
@@ -146,14 +146,14 @@ const ServicesSection = () => {
               {/* Accordion Header */}
               <button
                 onClick={() => setActiveService(activeService === service.id ? 0 : service.id)}
-                className="w-full py-6 flex items-start gap-5 group transition-all duration-300"
+                className="w-full py-4 sm:py-5 lg:py-6 flex items-start gap-3 sm:gap-4 lg:gap-5 group transition-all duration-300"
               >
                 {/* Icon with holographic background image - visually only when active */}
                 <div
-                  className="flex items-center justify-center flex-shrink-0 rounded-xl border transition-all"
+                  className={`flex items-center justify-center flex-shrink-0 rounded-xl border transition-all ${
+                    activeService === service.id ? 'w-10 h-10 sm:w-12 sm:h-12' : 'w-0'
+                  }`}
                   style={{
-                    width: activeService === service.id ? 48 : 0,
-                    height: 48,
                     marginRight: activeService === service.id ? 0 : -20,
                     opacity: activeService === service.id ? 1 : 0,
                     transform: activeService === service.id ? 'scale(1)' : 'scale(0.9)',
@@ -166,16 +166,16 @@ const ServicesSection = () => {
                 >
                   {(() => {
                     const Icon = service.icon;
-                    return <Icon className="w-5 h-5 text-white" strokeWidth={1.75} />;
+                    return <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" strokeWidth={1.75} />;
                   })()}
                 </div>
 
                 {/* Title and Content Container */}
-                <div className="flex-1 text-left">
+                <div className="flex-1 text-left min-w-0">
                   {/* Title and Number */}
-                  <div className="flex items-baseline gap-3">
+                  <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap">
                     <h3
-                      className="text-5xl tracking-tight transition-all duration-300"
+                      className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl tracking-tight transition-all duration-300"
                       style={{
                         color: activeService === service.id ? '#FFFFFF' : '#505050',
                         fontWeight: 300,
@@ -184,7 +184,7 @@ const ServicesSection = () => {
                     >
                       {service.title}
                     </h3>
-                    <span className="text-gray-600 text-sm font-light ml-auto">
+                    <span className="text-gray-600 text-xs sm:text-sm font-light ml-auto">
                       {service.number}
                     </span>
                   </div>
@@ -204,12 +204,12 @@ const ServicesSection = () => {
                   >
                     <div 
                       ref={(el) => { if (el) contentRefs.current[service.id] = el; }}
-                      className="pt-6 space-y-2"
+                      className="pt-4 sm:pt-5 lg:pt-6 space-y-1.5 sm:space-y-2"
                     >
                       {service.items.map((item, idx) => (
                         <div
                           key={idx}
-                          className="text-gray-300 text-sm tracking-wide leading-relaxed"
+                          className="text-gray-300 text-xs sm:text-sm tracking-wide leading-relaxed"
                           style={{
                             fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                             fontWeight: 300,
@@ -227,7 +227,7 @@ const ServicesSection = () => {
         </div>
 
         {/* Footer */}
-        <div className="mt-16 flex items-center justify-between">
+        <div className="mt-8 sm:mt-12 lg:mt-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-gray-500 text-xs">
             <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
