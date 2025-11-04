@@ -137,7 +137,7 @@ const StickySidebar = () => {
             }}
           >
             <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-            <span className="text-gray-400 text-sm">Available for <span className="text-white font-medium">3 projects</span></span>
+            <span className="text-gray-400 text-sm">Available for <span className="text-white font-medium">Projects and Hire</span></span>
           </div>
         </div>
 
