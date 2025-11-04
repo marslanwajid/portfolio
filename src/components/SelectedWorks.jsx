@@ -137,23 +137,26 @@ const SelectedWorks = ({ projects = [] }) => {
 
               {/* Content - Bottom */}
               <div 
-                className="absolute flex gap-3 justify-center items-center"
+                className="absolute flex flex-row gap-2 sm:gap-3 justify-center items-center"
                 style={{
                   left: '50%',
-                  bottom: '20px',
+                  bottom: '12px',
                   transform: 'translateX(-50%)',
-                  width: 'calc(100% - 40px)',
+                  width: 'calc(100% - 24px)',
                   maxWidth: '800px',
-                  padding: '12px 12px 12px 36px',
-                  borderRadius: '24px',
+                  paddingTop: '8px',
+                  paddingBottom: '8px',
+                  paddingLeft: '12px',
+                  paddingRight: '8px',
+                  borderRadius: '16px',
                   background: 'rgba(0, 0, 0, 0.5)',
                   backdropFilter: 'blur(16px)',
                 }}
               >
                 {/* Project Info */}
-                <div className="flex-1">
+                <div className="flex-1 text-left min-w-0">
                   <div 
-                    className="text-xs mb-2 font-light uppercase tracking-wider"
+                    className="text-xs mb-1 font-light uppercase tracking-wider"
                     style={{
                       color: hoveredProject === index ? '#FF6600' : 'rgba(255, 255, 255, 0.8)',
                     }}
@@ -161,14 +164,14 @@ const SelectedWorks = ({ projects = [] }) => {
                     {project.category}
                   </div>
                   <h3 
-                    className="mb-3 transition-colors duration-300"
+                    className="mb-1 transition-colors duration-300"
                     style={{
                       color: hoveredProject === index ? '#FF6600' : '#FFFFFF',
                     }}
                   >
                     <a 
                       href={project.slug ? `/portfolio/${project.slug}` : '#'}
-                      className="text-2xl md:text-3xl font-semibold text-white hover:no-underline"
+                      className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-semibold text-white hover:no-underline line-clamp-2"
                       style={{
                         color: hoveredProject === index ? '#FF6600' : '#FFFFFF',
                       }}
@@ -178,7 +181,7 @@ const SelectedWorks = ({ projects = [] }) => {
                   </h3>
                   <a 
                     href={project.slug ? `/portfolio/${project.slug}` : '#'}
-                    className="text-sm text-white/70 hover:text-white transition-colors"
+                    className="text-xs text-white/70 hover:text-white transition-colors"
                     style={{
                       color: hoveredProject === index ? '#FF6600' : 'rgba(255, 255, 255, 0.7)',
                     }}
@@ -190,21 +193,16 @@ const SelectedWorks = ({ projects = [] }) => {
                 {/* Arrow Button */}
                 <a
                   href={project.slug ? `/portfolio/${project.slug}` : '#'}
-                  className="flex items-center justify-center transition-all duration-300 group-hover:scale-105 flex-shrink-0"
+                  className="flex items-center justify-center transition-all duration-300 group-hover:scale-105 flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-[148px] xl:h-[148px] rounded-xl sm:rounded-2xl"
                   style={{
-                    width: '148px',
-                    height: '148px',
-                    borderRadius: '24px',
                     border: '1px solid rgba(255, 255, 255, 0.3)',
                     background: hoveredProject === index ? 'rgba(255, 102, 0, 0.1)' : 'transparent',
                   }}
                 >
                   <ArrowUpRight 
-                    className="transition-colors duration-300" 
+                    className="transition-colors duration-300 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 xl:w-10 xl:h-10" 
                     strokeWidth={2}
                     style={{
-                      width: '40px',
-                      height: '40px',
                       color: hoveredProject === index ? '#FF6600' : '#FFFFFF',
                     }}
                   />

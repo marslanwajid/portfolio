@@ -93,22 +93,6 @@ const StickySidebar = () => {
 
   return (
     <>
-      {/* Mobile Menu Button - Top Right (Sticky) - Outside container */}
-      <button
-        onClick={() => setIsMenuOpen(true)}
-        className={`lg:hidden fixed top-6 right-6 w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors shadow-lg ${
-          isMenuOpen ? 'z-[9998]' : 'z-[100]'
-        }`}
-        aria-label="Open menu"
-        style={{ position: 'fixed' }}
-      >
-        <img 
-          src="https://wpriverthemes.com/jayden/wp-content/themes/jayden/icons/dashboard.svg" 
-          alt="menu icon"
-          className="w-5 h-5"
-        />
-      </button>
-
       <aside className="relative lg:fixed left-0 top-0 lg:top-[2vh] h-auto lg:h-[100vh] w-full lg:w-[450px] bg-black flex lg:items-center justify-start p-4 z-50 overflow-y-auto">
         <div 
           className="w-full lg:max-w-xl rounded-3xl p-6 shadow-2xl relative overflow-hidden lg:ml-4 lg:h-[94vh]"
@@ -122,11 +106,27 @@ const StickySidebar = () => {
         >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
+          {/* Logo - Hidden on mobile, shown on desktop */}
+          <div className="hidden lg:flex w-10 h-10 bg-white rounded-xl items-center justify-center">
             <svg viewBox="0 0 24 24" fill="black" className="w-6 h-6">
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
             </svg>
           </div>
+          
+          {/* Mobile Menu Button - Replaces logo on mobile */}
+          <button
+            onClick={() => setIsMenuOpen(true)}
+            className={`lg:hidden w-10 h-10 bg-white rounded-xl flex items-center justify-center hover:bg-gray-100 transition-colors ${
+              isMenuOpen ? 'z-[9998]' : 'z-[100]'
+            }`}
+            aria-label="Open menu"
+          >
+            <img 
+              src="https://wpriverthemes.com/jayden/wp-content/themes/jayden/icons/dashboard.svg" 
+              alt="menu icon"
+              className="w-6 h-6"
+            />
+          </button>
           
           <div 
             className="flex items-center gap-2 px-4 py-2 rounded-full"
