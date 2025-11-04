@@ -15,8 +15,7 @@ A modern, responsive portfolio website built with a headless CMS architecture. T
 - **Framework**: React with Vite
 - **Styling**: Tailwind CSS
 - **API Integration**: REST API calls to WordPress backend
-- **Routing**: React Router
-- **Responsive Design**: Mobile-first approach with tablet and desktop breakpoints
+
 
 ## 🚀 Features
 
