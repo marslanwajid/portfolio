@@ -76,13 +76,13 @@ function HomeOnePage() {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 bg-black flex items-center justify-center z-[9999]">
-        <div className="relative w-64 md:w-80">
+      <div className="fixed inset-0 bg-black flex items-center justify-center z-[9999] px-4">
+        <div className="relative w-full max-w-[280px] sm:max-w-[320px] md:max-w-[400px] flex items-center justify-center">
           {/* Angle Brackets Container */}
-          <div className="relative inline-block">
+          <div className="relative inline-block w-full">
             {/* Base brackets (always visible, but will be covered) */}
             <div 
-              className="text-white/20 text-6xl md:text-8xl font-light tracking-wider text-center"
+              className="text-white/20 text-5xl sm:text-6xl md:text-8xl font-light tracking-wider text-center"
               style={{
                 fontFamily: 'monospace',
               }}
@@ -92,7 +92,7 @@ function HomeOnePage() {
             
             {/* Filled brackets (fills from bottom to top) */}
             <div 
-              className="absolute inset-0 text-white text-6xl md:text-8xl font-light tracking-wider text-center overflow-hidden transition-all duration-500 ease-out"
+              className="absolute inset-0 text-white text-5xl sm:text-6xl md:text-8xl font-light tracking-wider text-center overflow-hidden transition-all duration-500 ease-out"
               style={{
                 fontFamily: 'monospace',
                 clipPath: `inset(${100 - loadingProgress}% 0 0 0)`,
