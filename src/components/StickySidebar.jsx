@@ -130,6 +130,13 @@ const StickySidebar = () => {
 
   const handleNavClick = (e, href, sectionId) => {
     e.preventDefault();
+    // On mobile/tablet, clicking Home should go to the top of the StickySidebar (page top)
+    if (sectionId === 'home' && window.innerWidth < 1024) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setActiveSection('home');
+      return;
+    }
+
     const element = document.getElementById(sectionId);
     if (element) {
       const offset = 100;
@@ -219,10 +226,8 @@ const StickySidebar = () => {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           {/* Logo - Hidden on mobile, shown on desktop */}
-          <div className="hidden lg:flex w-10 h-10 bg-white rounded-xl items-center justify-center">
-            <svg viewBox="0 0 24 24" fill="black" className="w-6 h-6">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-            </svg>
+          <div className="hidden lg:flex w-10 h-10 bg-white rounded-xl items-center justify-center overflow-hidden">
+            <img src="/logo.png" alt="Logo" className="w-6 h-6 object-contain" />
           </div>
 
           {/* Availability pill */}
@@ -348,6 +353,7 @@ const StickySidebar = () => {
 
         {/* Get Started Button */}
         <button 
+          onClick={(e) => handleNavClick(e, '#contact', 'contact')}
           className="w-full text-white rounded-full py-4 px-6 flex items-center justify-between group transition-all hover:brightness-110"
           style={{
             background: 'rgba(39, 39, 42, 0.8)',
