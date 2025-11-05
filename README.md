@@ -2,6 +2,8 @@
 
 A modern, responsive portfolio website built with a headless CMS architecture. The backend is powered by WordPress, and the frontend is built with React, connected through REST APIs. Styling is handled with Tailwind CSS.
 
+> **Note**: You can also use only the frontend independently! The React frontend can be configured to work with any backend API or even as a standalone static site with hardcoded data.
+
 ## 🏗️ Architecture
 
 ### Backend (WordPress)
@@ -99,7 +101,6 @@ headless_frontend/
 ├── wordpress-code-snippets/ # WordPress PHP snippets
 │   ├── portfolio-enhanced.php
 │   ├── portfolio-settings.php
-│   └── enable-cf7-rest-api.php
 └── public/                 # Static assets
 ```
 
