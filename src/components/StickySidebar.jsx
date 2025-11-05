@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { ArrowRight, Twitter, Linkedin, Github } from 'lucide-react';
 import { fetchPortfolioSettings } from '../utils/api';
 import MobileMenu from './MobileMenu';
@@ -8,13 +8,17 @@ const StickySidebar = () => {
   const [imageError, setImageError] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isLeaving, setIsLeaving] = useState(false);
+  const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 });
+  const staticButtonRef = useRef(null);
 
   useEffect(() => {
     const loadSettings = async () => {
       try {
         const data = await fetchPortfolioSettings();
         setSettings(data);
-        setImageError(false); // Reset error state when new settings load
+        setImageError(false);
       } catch (error) {
         console.error('Error loading settings:', error);
       }
@@ -25,10 +29,59 @@ const StickySidebar = () => {
   const contact = settings?.contact || {};
   const social = settings?.social || {};
   
-  // Determine which image to use
   const profileImageSrc = imageError || !settings?.profile_photo 
     ? "/arslan.png" 
     : settings.profile_photo;
+
+  // Calculate and update the floating button position to match the static menu button
+  const updateButtonPosition = () => {
+    if (!staticButtonRef.current) return;
+    const rect = staticButtonRef.current.getBoundingClientRect();
+    const desiredLeft = rect.left;
+    const maxLeft = Math.max(0, window.innerWidth - 48 - 16); // prevent overflow (button ~48px + 16px margin)
+    const clampedLeft = Math.min(Math.max(0, desiredLeft), maxLeft);
+    setButtonPosition({
+      top: rect.top + window.scrollY,
+      left: clampedLeft
+    });
+  };
+
+  // Get the initial position of the static button and update on resize
+  useEffect(() => {
+    updateButtonPosition();
+    window.addEventListener('resize', updateButtonPosition);
+    return () => window.removeEventListener('resize', updateButtonPosition);
+  }, [settings]);
+
+  // When sticky state toggles, ensure position is freshly measured so the animated button matches the static one
+  useEffect(() => {
+    if (isScrolled || isLeaving) {
+      updateButtonPosition();
+    }
+  }, [isScrolled, isLeaving]);
+
+  // Track scroll position for sticky button
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollThreshold = 100;
+      const shouldBeScrolled = window.scrollY > scrollThreshold;
+      
+      if (isScrolled && !shouldBeScrolled) {
+        // Trigger leave animation
+        setIsLeaving(true);
+        setTimeout(() => {
+          setIsScrolled(false);
+          setIsLeaving(false);
+        }, 600); // Match animation duration (increased to 600ms)
+      } else if (!isScrolled && shouldBeScrolled) {
+        setIsScrolled(true);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isScrolled]);
 
   // Track active section for mobile menu
   useEffect(() => {
@@ -93,6 +146,65 @@ const StickySidebar = () => {
 
   return (
     <>
+      <style>
+        {`
+          @keyframes slide-down {
+            0% {
+              transform: translateY(-100px);
+              opacity: 0;
+            }
+            100% {
+              transform: translateY(0);
+              opacity: 1;
+            }
+          }
+          
+          @keyframes slide-up {
+            0% {
+              transform: translateY(0);
+              opacity: 1;
+            }
+            100% {
+              transform: translateY(0);
+              opacity: 0;
+            }
+          }
+          
+          .animate-slide-down {
+            animation: slide-down 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .animate-slide-up {
+            animation: slide-up 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          .sticky-button-enter {
+            animation: slide-down 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          }
+        `}
+      </style>
+
+      {/* Floating Sticky Button - Appears at same position when scrolled */}
+      {(isScrolled || isLeaving) && (
+        <button
+          onClick={() => setIsMenuOpen(true)}
+          className={`lg:hidden fixed w-10 h-10 bg-white rounded-xl flex items-center justify-center hover:bg-gray-100 transition-all duration-300 shadow-lg z-[9999] ${
+            isLeaving ? 'animate-slide-up' : 'animate-slide-down'
+          }`}
+          style={{
+            top: `${buttonPosition.top}px`,
+            left: `${buttonPosition.left}px`
+          }}
+          aria-label="Open menu"
+        >
+          <img 
+            src="https://wpriverthemes.com/jayden/wp-content/themes/jayden/icons/dashboard.svg" 
+            alt="menu icon"
+            className="w-6 h-6"
+          />
+        </button>
+      )}
+
       <aside className="relative lg:fixed left-0 top-0 lg:top-[2vh] h-auto lg:h-[100vh] w-full lg:w-[450px] bg-black flex lg:items-center justify-start p-4 z-50 overflow-y-auto">
         <div 
           className="w-full lg:max-w-xl rounded-3xl p-6 shadow-2xl relative overflow-hidden lg:ml-4 lg:h-[94vh]"
@@ -112,22 +224,8 @@ const StickySidebar = () => {
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
             </svg>
           </div>
-          
-          {/* Mobile Menu Button - Replaces logo on mobile */}
-          <button
-            onClick={() => setIsMenuOpen(true)}
-            className={`lg:hidden w-10 h-10 bg-white rounded-xl flex items-center justify-center hover:bg-gray-100 transition-colors ${
-              isMenuOpen ? 'z-[9998]' : 'z-[100]'
-            }`}
-            aria-label="Open menu"
-          >
-            <img 
-              src="https://wpriverthemes.com/jayden/wp-content/themes/jayden/icons/dashboard.svg" 
-              alt="menu icon"
-              className="w-6 h-6"
-            />
-          </button>
-          
+
+          {/* Availability pill */}
           <div 
             className="flex items-center gap-2 px-4 py-2 rounded-full"
             style={{
@@ -139,6 +237,22 @@ const StickySidebar = () => {
             <div className="w-2 h-2 bg-red-500 rounded-full"></div>
             <span className="text-gray-400 text-sm">Available for <span className="text-white font-medium">Projects and Hire</span></span>
           </div>
+
+          {/* Mobile Menu Button - Static version */}
+          <button
+            ref={staticButtonRef}
+            onClick={() => setIsMenuOpen(true)}
+            className={`lg:hidden w-10 h-10 bg-white rounded-xl flex items-center justify-center hover:bg-gray-100 transition-all duration-300 ${
+              isScrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'
+            }`}
+            aria-label="Open menu"
+          >
+            <img 
+              src="https://wpriverthemes.com/jayden/wp-content/themes/jayden/icons/dashboard.svg" 
+              alt="menu icon"
+              className="w-6 h-6"
+            />
+          </button>
         </div>
 
         {/* Profile Image with gradient background */}
@@ -155,7 +269,6 @@ const StickySidebar = () => {
               alt="Profile" 
               className="relative w-full h-full object-cover"
               onError={() => {
-                // If WordPress image fails to load, use fallback
                 if (!imageError) {
                   setImageError(true);
                 }
