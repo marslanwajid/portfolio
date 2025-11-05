@@ -208,15 +208,12 @@ const FAQSection = () => {
         <div className="mt-12 text-white/70 text-sm">
           <p>Do you have any other questions?</p>
           <a
-            href="#contact"
+            href="https://wa.me/+923156611804?text=Hello, I have a question about your services. Can you help me?"
             className="text-base text-white font-bold border-b border-white hover:text-gray-400 hover:border-gray-400 transition-colors duration-300"
             onClick={(e) => {
               e.preventDefault();
               // Scroll to contact section if exists
-              const contactSection = document.getElementById('contact');
-              if (contactSection) {
-                contactSection.scrollIntoView({ behavior: 'smooth' });
-              }
+              window.open('https://wa.me/+923156611804?text=Hello, I have a question about your services. Can you help me?', '_blank');
             }}
           >
             Ask me directly
