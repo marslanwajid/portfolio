@@ -38,22 +38,26 @@ const SelectedWorks = ({ projects = [] }) => {
           || project.featured_image_url 
           || 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=600&fit=crop';
         
-        // Get date from WordPress
-        let dateStr = 'May 2024';
-        if (project.date_completed) {
-          const date = new Date(project.date_completed);
-          dateStr = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-        } else if (project.date) {
-          const date = new Date(project.date);
-          dateStr = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        // Tech stack from WordPress (array or comma-separated string)
+        const techStackRaw = project.tech_stack || [];
+        const techStack = Array.isArray(techStackRaw)
+          ? techStackRaw
+          : (typeof techStackRaw === 'string' && techStackRaw.length > 0
+            ? techStackRaw.split(',').map(t => t.trim()).filter(Boolean)
+            : []);
+
+        let externalLink = project.project_url || project.link || null;
+        if (externalLink && !/^https?:\/\//i.test(externalLink)) {
+          externalLink = `https://${externalLink}`;
         }
 
         return {
           title: project.title?.rendered || project.title || 'Untitled Project',
           category: project.project_type || project.category || 'Website Design',
-          date: dateStr,
+          techStack,
           image: image,
           slug: project.slug || project.id,
+          link: externalLink || (project.slug ? `/portfolio/${project.slug}` : '#'),
           id: project.id
         };
       })
@@ -170,7 +174,9 @@ const SelectedWorks = ({ projects = [] }) => {
                     }}
                   >
                     <a 
-                      href={project.slug ? `/portfolio/${project.slug}` : '#'}
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-semibold text-white hover:no-underline line-clamp-2"
                       style={{
                         color: hoveredProject === index ? '#FF6600' : '#FFFFFF',
@@ -179,20 +185,31 @@ const SelectedWorks = ({ projects = [] }) => {
                       {project.title}
                     </a>
                   </h3>
-                  <a 
-                    href={project.slug ? `/portfolio/${project.slug}` : '#'}
-                    className="text-xs text-white/70 hover:text-white transition-colors"
-                    style={{
-                      color: hoveredProject === index ? '#FF6600' : 'rgba(255, 255, 255, 0.7)',
-                    }}
-                  >
-                    {project.date}
-                  </a>
+                  {/* Tech stack chips (replaces date) */}
+                  {project.techStack && project.techStack.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mt-1">
+                      {project.techStack.slice(0, 4).map((tech, i) => (
+                        <span
+                          key={i}
+                          className="text-[10px] sm:text-xs text-white/80 bg-white/10 border border-white/20 rounded-full px-2 py-0.5"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                      {project.techStack.length > 4 && (
+                        <span className="text-[10px] sm:text-xs text-white/60">
+                          +{project.techStack.length - 4} more
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Arrow Button */}
                 <a
-                  href={project.slug ? `/portfolio/${project.slug}` : '#'}
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center justify-center transition-all duration-300 group-hover:scale-105 flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-[148px] xl:h-[148px] rounded-xl sm:rounded-2xl"
                   style={{
                     border: '1px solid rgba(255, 255, 255, 0.3)',

@@ -83,11 +83,17 @@ function Portfolio() {
               const image = project._embedded?.['wp:featuredmedia']?.[0]?.source_url;
               const techStack = project.tech_stack || [];
               const techArray = Array.isArray(techStack) ? techStack : (techStack ? techStack.split(',') : []);
+              let external = project.project_url || project.link;
+              if (external && !/^https?:\/\//i.test(external)) {
+                external = `https://${external}`;
+              }
 
               return (
-                <Link
+                <a
                   key={project.id}
-                  to={`/portfolio/${project.slug}`}
+                  href={external || `/portfolio/${project.slug}`}
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noopener noreferrer" : undefined}
                   className="group bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300"
                 >
                   {image && (
@@ -133,7 +139,7 @@ function Portfolio() {
                       View Project →
                     </div>
                   </div>
-                </Link>
+                </a>
               );
             })}
           </div>

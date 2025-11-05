@@ -88,10 +88,16 @@ function Home() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {featuredProjects.slice(0, 4).map((project) => {
               const image = project._embedded?.['wp:featuredmedia']?.[0]?.source_url;
+              let external = project.project_url || project.link;
+              if (external && !/^https?:\/\//i.test(external)) {
+                external = `https://${external}`;
+              }
               return (
-                <Link
+                <a
                   key={project.id}
-                  to={`/portfolio/${project.slug}`}
+                  href={external || `/portfolio/${project.slug}`}
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noopener noreferrer" : undefined}
                   className="group bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow"
                 >
                   {image && (
@@ -111,7 +117,7 @@ function Home() {
                       <span className="text-sm text-gray-500">{project.project_type}</span>
                     )}
                   </div>
-                </Link>
+                </a>
               );
             })}
           </div>
