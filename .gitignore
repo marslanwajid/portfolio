@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# WordPress code snippets (backend only, not needed in frontend repo)
+wordpress-code-snippets/
